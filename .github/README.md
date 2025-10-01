@@ -91,7 +91,7 @@ Vastaus voidaan antaa JSON-muodossa hyödyntäen Honon `Context`-olion `json`-me
 
 Tehtävän viimeisen funktion tulee kuunnella HTTP GET -pyyntöjä polussa `/preview`. Funktio odottaa saavansa joko kolme kyselyparametria: `r`, `g` ja `b`, tai yhden kyselyparametrin: `hex`.
 
-Funktion tulee palauttaa vastauksena HTML-sivu, joka on muuten tyhjä, mutta jonka taustaväri on määritetty saatujen parametrien perusteella. Jos on saatu RGB-parametrit, käytä niitä taustavärin määrittämiseen. Taustaväri voidaan määritellä joko erillisessä CSS-tyylissä tai suoraan HTML-elementin `style`-attribuutissa.
+Funktion tulee palauttaa vastauksena HTML-sivu, joka saa olla muuten tyhjä, mutta jonka taustaväri on määritetty saatujen parametrien perusteella. Taustaväri voidaan määritellä joko erillisessä CSS-tyylissä tai suoraan HTML-elementin `style`-attribuutissa. Voit halutessasi lisätä sivulle myös muita elementtejä, kuten otsikon tai värikoodin tekstinä.
 
 Esimerkiksi seuraavien pyyntöjen tulee molempien palauttaa HTML-sivu, jonka taustaväri on "hot pink":
 
