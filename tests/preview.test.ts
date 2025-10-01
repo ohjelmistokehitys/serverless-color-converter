@@ -21,4 +21,16 @@ describe("color preview", () => {
 
         expect((await response.text()).toLowerCase()).toContain('background');
     });
+
+    it('should not show unsafe submitted HEX values in the output', async () => {
+        const response = await app.request('/preview?hex=<script>alert("Hacked!")</script>');
+
+        expect((await response.text()).toLowerCase()).not.toContain('<script>alert("hacked!")</script>');
+    });
+
+    it('should not show unsafe submitted RGB values in the output', async () => {
+        const response = await app.request('/preview?r=<script>alert("Hacked!")</script>&g=255&b=255');
+
+        expect((await response.text()).toLowerCase()).not.toContain('<script>alert("hacked!")</script>');
+    });
 });

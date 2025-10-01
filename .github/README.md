@@ -98,6 +98,13 @@ Esimerkiksi seuraavien pyyntöjen tulee molempien palauttaa HTML-sivu, jonka tau
 - `http://localhost:8787/preview?r=255&g=105&b=180`
 - `http://localhost:8787/preview?hex=%23FF69B4`
 
+HTML-sisällön palauttamisessa voidaan käyttää Honon `Context`-olion `html`-metodia, josta kerrotaan tarkemmin [Context-dokumentissa](https://hono.dev/docs/api/context#html).
+
+> [!WARNING]
+> Käyttäjältä saadut arvot tulee aina tarkistaa ennen niiden käyttöä, jotta vältetään mahdolliset XSS-hyökkäykset (Cross-Site Scripting). Jos laitat käyttäjän syöttämät arvot suoraan HTML:ään ilman tarkistusta, saattaa hyökkääjä pystyä muotoilemaan syötteensä siten, että se suoritetaan osana HTML-sivua. Jos käyttäjä esimerkiksi syöttää `<script>alert('Hacked!');</script>` HEX-parametrina, ja jos et tarkista tätä arvoa, se voi johtaa haitallisen JavaScript-koodin suorittamiseen sivulla. Tyypilliset XSS-hyökkäykset vuotavat tietoja, kuten evästeitä, kun hyökkääjä onnistuu saamaan uhrin avaamaan sivun linkillä, jossa on haitallista koodia.
+>
+> Hono tarjoaa erilaisia keinoja suojautua XSS-hyökkäyksiltä, kuten [html Helperin](https://hono.dev/docs/helpers/html#html-helper), joka voi olla avuksi. Voit myös käyttää HTML-rakenteen muodostamisessa Reactista tuttua JSX-syntaksia, jonka avulla merkkijonot käsitellään turvallisesti. JSX:n käytöstä on [oma erillinen ohjesivunsa Honon dokumentaatiossa](https://hono.dev/docs/guides/jsx), josta löydät tärkeimmät ohjeet. Jos käytät JSX:ää, muista vaihtaa tiedostopääte `.ts` → `.tsx` sekä päivitä `wrangler.jsonc`-tiedoston `main`-kenttä vastaamaan uutta tiedostopäätettä.
+
 
 ### Laadulliset vaatimukset (25 %)
 
