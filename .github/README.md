@@ -133,7 +133,7 @@ npx vitest run
 
 ## Ratkaisun lähettäminen GitHubiin
 
-Tarkista, että olet lisännyt tarvittavat muutokset versionhallintaan ja tee commit ennen kuin pushaat tekemäsi muutokset GitHubiin. GitHub actions -työkalu tarkistaa automaattisesti, menevätkö testit läpi, ja näet tulokset GitHubin käyttöliittymästä actions-välilehdeltä.
+Tarkista, että olet lisännyt tekemäsi muutokset versionhallintaan ja tee commit. Lopuksi pushaa tekemäsi muutokset GitHubiin tarkastettavaksi. GitHub actions -työkalu tarkistaa automaattisesti, menevätkö testit läpi, ja näet tulokset GitHubin käyttöliittymästä actions-välilehdeltä.
 
 Voit lähettää ratkaisusi uudestaan niin monesti kuin haluat tehtävän määräaikaan asti. Viimeisimmän arvioinnin pisteet jäävät voimaan.
 
