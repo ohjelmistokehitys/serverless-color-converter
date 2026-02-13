@@ -63,13 +63,23 @@ Kun olet saanut projektin luotua ja käynnistettyä, voit alkaa toteuttaa ensimm
 
 Funktio tulee toteuttaa siten, että se kuuntelee HTTP GET -pyyntöjä polussa `/rgb-to-hex`. Funktio odottaa saavansa kolme kyselyparametria: `r`, `g` ja `b`, jotka edustavat punaisen, vihreän ja sinisen komponenttien arvoja. Jokaisen arvon tulee olla kokonaisluku välillä 0–255.
 
-Pyynnön käsittelystä kerrotaan lyhyesti Getting Started -sivulla, mutta tarkemmat tiedot löydät [`HonoRequest`-dokumentista](https://hono.dev/docs/api/request).
+Pyynnön käsittelystä kerrotaan lyhyesti [Getting Started -sivulla](https://hono.dev/docs/getting-started/basic), mutta tarkemmat tiedot löydät [`HonoRequest`-dokumentista](https://hono.dev/docs/api/request).
 
 Esimerkiksi pyyntöön `http://localhost:8787/rgb-to-hex?r=64&g=224&b=208` funktiosi tulee palauttaa vastaus, joka sisältää HEX-muodossa olevan värin `#40E0D0` (turkoosi). Värikoodi tulee palauttaa joko tekstinä tai JSON-muodossa, oman valintasi mukaan. Esitä HEX-arvot aina isoilla kirjaimilla.
 
 > [!TIP]
 > Huomaa, että kyselyparametrit ovat aina merkkijonoja, joten ne on syytä muuntaa kokonaisluvuiksi ennen kuin käytät niitä laskuissa.
 
+Testaa funktiosi toimintaa esimerkiksi selaimen tai curl-komennon avulla, ja varmista, että se palauttaa oikeat HEX-arvot eri RGB-syötteillä. Voit myös hyödyntää automaattisia testejä, jotka on määritetty [`tests/rgbToHex.test.ts`-tiedostossa](./../tests/rgbToHex.test.ts).
+
+```bash
+# testaa funktio curl-komennolla:
+curl "http://localhost:8787/rgb-to-hex?r=64&g=224&b=208"
+
+# testaa funktio Vitest-työkalulla:
+npm install --save-dev vitest
+npx vitest run tests/rgbToHex.test.ts
+```
 
 ### Funktio 2: HEX → RGB -muunnin (25 %)
 
@@ -84,8 +94,14 @@ Esimerkiksi pyyntöön `http://localhost:8787/hex-to-rgb?hex=%23FA8072` tulee va
 Vastaus voidaan antaa JSON-muodossa hyödyntäen Honon `Context`-olion `json`-metodia, josta kerrotaan tarkemmin [Context-dokumentissa](https://hono.dev/docs/api/context#json).
 
 > [!TIP]
-> Muista, että URL-osoitteessa `#`-merkki tulee koodata muodossa `%23`, jotta selain ei tulkitse sitä "ankkuriksi", eli sivun sisäiseksi linkiksi.
+> Huomaa, että URL-osoitteessa `#`-merkki tulee koodata muodossa `%23`, jotta selain ei tulkitse sitä "ankkuriksi", eli sivun sisäiseksi linkiksi.
 
+Voit jälleen testata funktiosi toimintaa selaimella, curl-komennolla tai automaattisilla testeillä, jotka on määritetty [`tests/hexToRgb.test.ts`-tiedostossa](./../tests/hexToRgb.test.ts).
+
+```bash
+npm install --save-dev vitest
+npx vitest run tests/hexToRgb.test.ts
+```
 
 ### Funktio 3: värin esikatselu (25 %)
 
