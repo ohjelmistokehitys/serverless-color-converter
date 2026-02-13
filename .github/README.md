@@ -29,13 +29,18 @@ Esimerkiksi MDN:n ["Color format converter" -työkalu](https://developer.mozilla
 
 ### Projektin luominen
 
-Luo tähän repositorioon uusi Hono-projekti seuraamalla [Honon Getting Started -ohjeita](https://hono.dev/docs/getting-started/basic). Toisin kuin ohjeissa, luo projektisi oman repositoriosi juureen, älä erilliseen kansioon:
+Luo tähän repositorioon uusi Hono-projekti seuraamalla [Honon Getting Started -ohjeita](https://hono.dev/docs/getting-started/basic).
+
+Toisin kuin ohjeissa, luo projektisi oman repositoriosi juureen, älä erilliseen kansioon:
 
 ```bash
+# alustaa projektin nykyiseen kansioon:
 npm create hono@latest .
 ```
 
 Valitse pohjaksi (template) `cloudflare-workers`<sup>1</sup> ja paketinhallinnaksi `npm`. Luontityökalu luo sinulle tarvitsemasi tiedostot ja kansiot ja varmistaa lisäksi, että haluat luoda projektin nykyiseen kansioon, joka ei ole tyhjä. Jos luot epähuomiossa projektin väärään paikkaan, voit siirtää luodut tiedostot ja kansiot manuaalisesti projektin juureen.
+
+Löydät tarkempaa tietoa yllä käytettävästä hono-paketista [Honon npm-sivulta](https://www.npmjs.com/package/hono).
 
 > [!NOTE]
 > <sup>1</sup> Alustariippumattomuudesta huolimatta esimerkin vuoksi tarvitsemme jonkin kohdeympäristön, joka tässä tapauksessa on [Cloudflare Workers](https://workers.cloudflare.com/). Cloudflare Workers on serverless-alusta, joka mahdollistaa JavaScriptin ja muiden kielten suorittamisen "reunalla" (edge), eli lähellä käyttäjää, mikä parantaa suorituskykyä ja vähentää latenssia.
@@ -167,7 +172,7 @@ Voit lähettää ratkaisusi uudestaan niin monesti kuin haluat tehtävän määr
 
 ## Lopuksi: mikä ihmeen serverless?
 
-Paikallisessa kehityksessä tässä tehtävässä työstetty serverless-sovellus ei juuri eronnut palvelinpohjaisista sovelluksista. Tehtävässä tarvitsit oman Node.js-prosessin, joka kuunteli HTTP-pyyntöjä tietyssä portissa.
+Paikallisessa kehitysympäristössä tämä serverless-sovellus ei juuri eronnut palvelinpohjaisista sovelluksista. Tehtävässä tarvitsit oman Node.js-prosessin, joka kuunteli HTTP-pyyntöjä tietyssä portissa.
 
 Tuotantokäytössä funktiosi voidaan kuitenkin ajaa ilman omaa pitkään käynnissä olevaa palvelinprosessia, jolloin maksat vain siitä ajasta, kun funktiosi todella suoritetaan. Tämä voi olla kustannustehokasta, erityisesti silloin, kun sovelluksesi ei ole jatkuvasti käytössä.
 
@@ -176,7 +181,14 @@ Sovelluksesi skaalaaminen on myös yksinkertaisempaa, koska palveluntarjoajan ka
 Serverlessin todellinen luonne tulee siis esiin vasta, kun sovellus julkaistaan pilvipalveluun.
 
 
-## Tietoa harjoituksesta
+## Lisenssit ja tekijänoikeudet
+
+### Hono-sovelluskehys
+
+Hono-sovelluskehys on [avoimen lähdekoodin projekti](https://github.com/honojs/hono), joka on lisensoitu [MIT-lisenssillä](https://github.com/honojs/hono/blob/main/LICENSE).
+
+
+### Tämä tehtävä
 
 Tämän tehtävän on kehittänyt Teemu Havulinna ja se on lisensoitu [Creative Commons BY-NC-SA -lisenssillä](https://creativecommons.org/licenses/by-nc-sa/4.0/).
 
