@@ -1,4 +1,4 @@
-name: GitHub Classroom Workflow
+name: Autograding Workflow
 
 on:
   - push
@@ -13,10 +13,12 @@ jobs:
   build:
     name: Autograding
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
+    if: (github.event_name != 'push' || github.event.head_commit.message != 'Initial commit')
 
-      - uses: actions/setup-node@v6
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
         with:
           node-version: 'lts/*'
 
