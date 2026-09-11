@@ -1,5 +1,5 @@
-import app from '../src/index';
-import { describe, test, expect } from 'vitest';
+import { describe, expect, test } from 'vitest';
+import app from '../src/';
 
 describe("error handling", () => {
 

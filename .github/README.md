@@ -6,14 +6,17 @@ Palvelinprosessin sijasta serverless-sovellukset, kuten Hono, toimivat tapahtuma
 
 Suurimmilla palveluntarjoajilla, kuten AWS, Google ja Microsoft, on omat serverless-alustansa, joissa jokaisella on omat kirjastonsa ja työkalunsa. Hono on suunniteltu toimimaan useissa eri ympäristöissä, joten tämän harjoituksen menetelmät ja työkalut ovat sovellettavissa laajemmin kuin vain yhden palveluntarjoajan ekosysteemiin.
 
-Harjoituksessa käytämme Node.js:ää ja npm:ää, jotka sinulla tulee olla valmiiksi asennettuina.
+
+## Kehitysympäristö
+
+Tämä tehtävä on suunniteltu ratkaistavaksi [kehityskontissa](https://code.visualstudio.com/docs/devcontainers/containers) tai [CodeSpacessa](https://github.com/features/codespaces). Repositorio sisältää valmiin [`devcontainer.json`-tiedoston](../.devcontainer/devcontainer.json), jossa on määritetty kehitysympäristön asetukset. Kehityskontti eristää projektin muusta käyttöjärjestelmästä, joten sillä voi olla myös positiivisia tietoturvavaikutuksia.
+
+Halutessasi voit ratkaista tehtävän myös paikallisessa kehitysympäristössä, kunhan sinulla on tuore Node.js-versio sekä npm-paketinhallinta asennettuna.
 
 
 ## Tehtävän suorittaminen
 
 Tämän tehtävän suorittamiseksi sinun tulee perehtyä [Honon dokumentaatioon](https://hono.dev/docs/). Tässä readme-tiedostossa olevat ohjeet täydentävät virallista dokumentaatiota ja tarkentavat serverless-funktioidesi vaatimuksia.
-
-Aloita kloonaamalla kopio tehtävärepositoriosta omalle koneellesi. Avaa repositorio VS Code:ssa sekä komentorivillä. Tehtävän edetessä tee uusia committeja ja pushaa ne GitHubiin.
 
 
 ## Toiminnalliset vaatimukset
@@ -22,9 +25,9 @@ Tässä tehtävässä tarkoituksenasi on toteuttaa HTTP-pyyntöihin vastaavia fu
 
 HEX ja RGB ovat yleisimpiä tapoja esittää värejä web-kehityksessä. Molemmissa muodoissa väri määritellään punaisen, vihreän ja sinisen (**R**ed, **G**reen, **B**lue) komponenttien avulla. HEX-muodossa väri esitetään kuusinumeroisena [heksadesimaalilukuna](https://fi.wikipedia.org/wiki/Heksadesimaalij%C3%A4rjestelm%C3%A4), kun taas RGB-muodossa väri esitetään kolmella desimaaliluvulla. Molemmat kuvaavat samaa väriä ja niiden välillä voidaan tehdä suoraviivaisia muunnoksia.
 
-Esimerkiksi RGB-arvo `255, 0, 0` vastaa HEX-arvoa `#FF0000`, joka edustaa punaista väriä. `0, 255, 0` eli vihreä voidaan esittää muodossa `#00FF00`, kun taas valkoinen on `255, 255, 255` (`#FFFFFF`) ja musta on `0, 0, 0` (`#000000`).
+Esimerkiksi RGB-arvo `255, 0, 0` vastaa HEX-arvoa `#FF0000`, joka vastaa punaista väriä. `0, 255, 0` eli vihreä voidaan esittää muodossa `#00FF00`, kun taas valkoinen on `255, 255, 255` (`#FFFFFF`) ja musta on `0, 0, 0` (`#000000`).
 
-Esimerkiksi MDN:n ["Color format converter" -työkalu](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_colors/Color_format_converter) tukee samankaltaisia ominaisuuksia kuin tässä tehtävässä toteutettavat funktiot, joten voit käyttää sitä apuna idean ymmärtämisessä. Tässä tehtävässä ei tarvitse ottaa kantaa mahdolliseen värien läpinäkyvyyteen.
+Esimerkiksi MDN:n ["Color format converter" -työkalu](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_colors/Color_format_converter) tukee samankaltaisia ominaisuuksia kuin tässä tehtävässä toteutettavat funktiot, joten voit käyttää sitä apuna idean ymmärtämisessä. Tässä tehtävässä ei tarvitse ottaa kantaa mahdolliseen värien läpinäkyvyyteen (opacity / alpha channel).
 
 
 ### Projektin luominen
@@ -34,32 +37,40 @@ Luo tähän repositorioon uusi Hono-projekti seuraamalla [Honon Getting Started 
 Toisin kuin ohjeissa, luo projektisi oman repositoriosi juureen, älä erilliseen kansioon:
 
 ```bash
-# alustaa projektin nykyiseen kansioon:
+# piste komennon lopussa alustaa projektin nykyiseen kansioon:
 npm create hono@latest .
+
+# vaihtoehtoisesti voit tehdä valinnat myös osana komentoa:
+npm create hono@latest . -- --template cloudflare-workers --pm npm --install
 ```
 
-Valitse pohjaksi (template) `cloudflare-workers`<sup>1</sup> ja paketinhallinnaksi `npm`. Luontityökalu luo sinulle tarvitsemasi tiedostot ja kansiot ja varmistaa lisäksi, että haluat luoda projektin nykyiseen kansioon, joka ei ole tyhjä. Jos luot epähuomiossa projektin väärään paikkaan, voit siirtää luodut tiedostot ja kansiot manuaalisesti projektin juureen.
+Valitse pohjaksi (template) `cloudflare-workers`<sup>1</sup> ja paketinhallinnaksi `npm`. Luontityökalu luo sinulle tarvitsemasi tiedostot ja kansiot ja varmistaa lisäksi, että haluat luoda projektin nykyiseen kansioon, joka ei ole tyhjä. Jos luot epähuomiossa projektin väärään paikkaan, voit siirtää luodut tiedostot ja kansiot manuaalisesti repositorion juureen.
 
-Löydät tarkempaa tietoa yllä käytettävästä hono-paketista [Honon npm-sivulta](https://www.npmjs.com/package/hono).
+Löydät tarkempaa tietoa yllä käytettävästä [hono-paketista](https://www.npmjs.com/package/hono) ja [create-hono-paketista](https://www.npmjs.com/package/create-hono) npm:n verkkosivuilta.
 
 > [!NOTE]
 > <sup>1</sup> Alustariippumattomuudesta huolimatta esimerkin vuoksi tarvitsemme jonkin kohdeympäristön, joka tässä tapauksessa on [Cloudflare Workers](https://workers.cloudflare.com/). Cloudflare Workers on serverless-alusta, joka mahdollistaa JavaScriptin ja muiden kielten suorittamisen "reunalla" (edge), eli lähellä käyttäjää, mikä parantaa suorituskykyä ja vähentää latenssia.
 >
-> Sinun ei tarvitse rekisteröityä Cloudflareen tai luoda tiliä, koska sovellusta kokeillaan ja testataan paikallisesti. Jos haluat, voit jatkaa tehtävän parissa ja julkaista sovelluksesi Cloudflaren Workers-alustalle itsenäisesti.
+> Sinun ei tarvitse rekisteröityä Cloudflareen tai luoda tiliä, koska sovellusta kokeillaan ja testataan paikallisesti. Jos haluat, voit jatkaa tehtävän parissa ja julkaista sovelluksesi Cloudflaressa tai muussa pilvipalvelussa itsenäisesti.
 
 
 **Asennus ja käynnistys**
 
 Projektin luonnin yhteydessä [`create-hono`-työkalu](https://www.npmjs.com/package/create-hono) luo uuden `README.md`-tiedoston, joka sisältää lisää ohjeita projektin asentamiseksi ja käynnistämiseksi. Samat ohjeet löytyvät myös Getting Started -sivulta.
 
-Asenna tarvittaessa riippuvuudet, käynnistä kehityspalvelin edellä mainittujen lähteiden mukaan ja varmista, että sovelluksesi vastaa selaimen pyyntöön osoitteessa `http://localhost:8787`.
+Asenna riippuvuudet ja käynnistä kehityspalvelin edellä mainittujen lähteiden mukaan. Varmista myös, että sovelluksesi vastaa selaimen pyyntöön osoitteessa `http://localhost:8787`.
 
 
 **Hakemistorakenne**
 
-Tehtävän automaattiset testit on määritetty testaamaan `src/index.ts`-tiedostossa olevia funktioita, joten toteuta varsinainen sovellus kyseiseen tiedostoon.
+Tehtävän automaattiset testit on määritetty testaamaan `src/index.ts`-tiedostossa olevia funktioita, joten toteuta varsinainen sovellus kyseiseen tiedostoon. Voit lisäksi luoda muita tiedostoja ja kansioita tarpeen mukaan.
 
-Voit lisäksi luoda muita tiedostoja ja kansioita tarpeen mukaan, mutta varmista, että Hono-sovellus on lopulta `src/index.ts`-tiedostossa "default export", jotta automaattiset testit löytävät funktiosi.
+> Tiedostosta `src/index.ts` tulee löytyä seuraava `export`, jonka avulla testit voivat käyttää sovellusta:
+>
+> ```ts
+> // Tämä löytyy oletuksena valmiiksi tiedoston lopusta:
+> export default app
+> ```
 
 
 ### Funktio 1: RGB → HEX -muunnin (25 %)
@@ -70,12 +81,12 @@ Funktio tulee toteuttaa siten, että se kuuntelee HTTP GET -pyyntöjä polussa `
 
 Pyynnön käsittelystä kerrotaan lyhyesti [Getting Started -sivulla](https://hono.dev/docs/getting-started/basic), mutta tarkemmat tiedot löydät [`HonoRequest`-dokumentista](https://hono.dev/docs/api/request).
 
-Esimerkiksi pyyntöön `http://localhost:8787/rgb-to-hex?r=64&g=224&b=208` funktiosi tulee palauttaa vastaus, joka sisältää HEX-muodossa olevan värin `#40E0D0` (turkoosi). Värikoodi tulee palauttaa joko tekstinä tai JSON-muodossa, oman valintasi mukaan. Esitä HEX-arvot aina isoilla kirjaimilla.
+Esimerkiksi pyynnöllä `http://localhost:8787/rgb-to-hex?r=64&g=224&b=208` funktiosi tulee palauttaa vastaus, joka sisältää HEX-muodossa olevan värin `#40E0D0` (turkoosi). Värikoodi tulee palauttaa joko tekstinä (`text/plain`) tai JSON-muodossa (`application/json`), oman valintasi mukaan. Esitä HEX-arvot aina isoilla kirjaimilla.
 
 > [!TIP]
 > Huomaa, että kyselyparametrit ovat aina merkkijonoja, joten ne on syytä muuntaa kokonaisluvuiksi ennen kuin käytät niitä laskuissa.
 
-Testaa funktiosi toimintaa esimerkiksi selaimen tai curl-komennon avulla, ja varmista, että se palauttaa oikeat HEX-arvot eri RGB-syötteillä. Voit myös hyödyntää automaattisia testejä, jotka on määritetty [`tests/rgbToHex.test.ts`-tiedostossa](./../tests/rgbToHex.test.ts).
+Testaa funktiosi toimintaa esimerkiksi selaimen tai curl-komennon avulla. Varmista, että ratkaisusi palauttaa oikeat HEX-arvot eri RGB-syötteillä. Voit myös hyödyntää automaattisia testejä, jotka on määritetty [`tests/rgbToHex.test.ts`-tiedostossa](./../tests/rgbToHex.test.ts).
 
 ```bash
 # testaa funktio curl-komennolla:

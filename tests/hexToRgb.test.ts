@@ -1,5 +1,5 @@
-import app from '../src/index';
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
+import app from '../src/';
 
 describe("hex to rgb converter", () => {
 

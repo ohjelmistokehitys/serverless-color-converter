@@ -4,6 +4,8 @@
     "name": "Serverless color converter",
     "image": "mcr.microsoft.com/devcontainers/javascript-node",
     "containerEnv": {
+        // see https://github.com/cloudflare/workers-sdk/blob/main/packages/wrangler/telemetry.md#how-can-i-configure-wrangler-telemetry
+        "WRANGLER_SEND_METRICS": "false",
         // see https://donottrack.sh/
         "DO_NOT_TRACK": "1"
     }
