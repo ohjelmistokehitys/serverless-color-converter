@@ -2,21 +2,22 @@
 
 Tässä tehtävässä opit hyödyntämään [Hono-sovelluskehystä](http://hono.dev/) ja toteuttamaan funktioita, jotka käsittelevät HTTP-pyyntöjä ja -vastauksia, mutta jotka eivät ole riippuvaisia tietystä palvelinympäristöstä.
 
-Palvelinprosessin sijasta serverless-sovellukset, kuten Hono, toimivat tapahtumapohjaisesti, jolloin koodi suoritetaan vain, kun tietty tapahtuma, kuten HTTP-pyyntö, laukaisee sen.
+> *"Hono - means flame🔥 in Japanese - is a small, simple, and ultrafast web framework built on Web Standards. It works on any JavaScript runtime: Cloudflare Workers, Fastly Compute, Deno, Bun, Vercel, AWS Lambda, Lambda@Edge, and Node.js."*
+>
+> https://www.npmjs.com/package/hono
 
-Suurimmilla palveluntarjoajilla, kuten AWS, Google ja Microsoft, on omat serverless-alustansa, joissa jokaisella on omat kirjastonsa ja työkalunsa. Hono on suunniteltu toimimaan useissa eri ympäristöissä, joten tämän harjoituksen menetelmät ja työkalut ovat sovellettavissa laajemmin kuin vain yhden palveluntarjoajan ekosysteemiin.
+Honolla on kirjoitushetkellä kymmeniä miljoonia viikoittaisia latauksia [npm-pakettirekisterissä](https://www.npmjs.com/package/hono). Hono on suunniteltu toimimaan useissa eri ympäristöissä, joten tämän harjoituksen menetelmät ja työkalut ovat sovellettavissa laajemmin kuin vain yhden palveluntarjoajan ekosysteemiin.
+
+Palvelinprosessin sijasta serverless-sovellukset toimivat tapahtumapohjaisesti, jolloin koodi suoritetaan vain, kun tietty tapahtuma, kuten HTTP-pyyntö, laukaisee sen. Vaikka tässä kehitysympäristössä käynnistämme sovelluksen kuuntelemaan HTTP-pyyntöjä tietyssä portissa, tuotantoympäristössä sovelluksesi voidaan ajaa ilman omaa pitkään käynnissä olevaa palvelinprosessia. Hiljaisena aikana se ei siis kuluta ylimääräisiä resursseja ja ruuhka-aikoina sovellusta voidaan suorittaa tehokkaasti rinnakkain.
+
+Tämän tehtävän suorittamiseksi sinun tulee perehtyä [Honon dokumentaatioon](https://hono.dev/docs/). Tässä readme-tiedostossa olevat ohjeet täydentävät virallista dokumentaatiota ja tarkentavat serverless-funktioidesi vaatimuksia, mutta joudut etsimään itse tietoa Honon käytöstä, JavaScriptin numero-operaatioista ja muista tarvittavista asioista.
 
 
 ## Kehitysympäristö
 
-Tämä tehtävä on suunniteltu ratkaistavaksi [kehityskontissa](https://code.visualstudio.com/docs/devcontainers/containers) tai [CodeSpacessa](https://github.com/features/codespaces). Repositorio sisältää valmiin [`devcontainer.json`-tiedoston](../.devcontainer/devcontainer.json), jossa on määritetty kehitysympäristön asetukset. Kehityskontti eristää projektin muusta käyttöjärjestelmästä, joten sillä voi olla myös positiivisia tietoturvavaikutuksia.
+Tämä tehtävä on suunniteltu ratkaistavaksi [kehityskontissa](https://code.visualstudio.com/docs/devcontainers/containers) tai [CodeSpacessa](https://github.com/features/codespaces). Repositorio sisältää valmiin [`devcontainer.json`-tiedoston](./.devcontainer/devcontainer.json), jossa on määritetty kehitysympäristön asetukset. Kehityskontti eristää projektin muusta käyttöjärjestelmästä, joten sillä voi olla myös positiivisia tietoturvavaikutuksia.
 
 Halutessasi voit ratkaista tehtävän myös paikallisessa kehitysympäristössä, kunhan sinulla on tuore Node.js-versio sekä npm-paketinhallinta asennettuna.
-
-
-## Tehtävän suorittaminen
-
-Tämän tehtävän suorittamiseksi sinun tulee perehtyä [Honon dokumentaatioon](https://hono.dev/docs/). Tässä readme-tiedostossa olevat ohjeet täydentävät virallista dokumentaatiota ja tarkentavat serverless-funktioidesi vaatimuksia.
 
 
 ## Toiminnalliset vaatimukset
@@ -25,52 +26,66 @@ Tässä tehtävässä tarkoituksenasi on toteuttaa HTTP-pyyntöihin vastaavia fu
 
 HEX ja RGB ovat yleisimpiä tapoja esittää värejä web-kehityksessä. Molemmissa muodoissa väri määritellään punaisen, vihreän ja sinisen (**R**ed, **G**reen, **B**lue) komponenttien avulla. HEX-muodossa väri esitetään kuusinumeroisena [heksadesimaalilukuna](https://fi.wikipedia.org/wiki/Heksadesimaalij%C3%A4rjestelm%C3%A4), kun taas RGB-muodossa väri esitetään kolmella desimaaliluvulla. Molemmat kuvaavat samaa väriä ja niiden välillä voidaan tehdä suoraviivaisia muunnoksia.
 
-Esimerkiksi RGB-arvo `255, 0, 0` vastaa HEX-arvoa `#FF0000`, joka vastaa punaista väriä. `0, 255, 0` eli vihreä voidaan esittää muodossa `#00FF00`, kun taas valkoinen on `255, 255, 255` (`#FFFFFF`) ja musta on `0, 0, 0` (`#000000`).
+Esimerkiksi RGB-arvo `255, 0, 0` vastaa HEX-arvoa `#FF0000`, joka vastaa punaista väriä. `0, 255, 0` eli vihreä voidaan esittää muodossa `#00FF00`, kun taas valkoinen on `255, 255, 255` (`#FFFFFF`) ja musta on `0, 0, 0` (`#000000`):
+
+Väri     | RGB       | HEX
+---------|-----------|----
+Punainen | 255, 0, 0 | #FF0000
+Vihreä   | 0, 255, 0 | #00FF00
+Sininen  | 0, 0, 255 | #0000FF
 
 Esimerkiksi MDN:n ["Color format converter" -työkalu](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_colors/Color_format_converter) tukee samankaltaisia ominaisuuksia kuin tässä tehtävässä toteutettavat funktiot, joten voit käyttää sitä apuna idean ymmärtämisessä. Tässä tehtävässä ei tarvitse ottaa kantaa mahdolliseen värien läpinäkyvyyteen (opacity / alpha channel).
 
 
-### Projektin luominen
+### Projektipohja
 
-Luo tähän repositorioon uusi Hono-projekti seuraamalla [Honon Getting Started -ohjeita](https://hono.dev/docs/getting-started/basic).
-
-Toisin kuin ohjeissa, luo projektisi oman repositoriosi juureen, älä erilliseen kansioon:
+Tähän repositorioon on luotu valmis projektipohja, joka noudattaa [Honon Getting Started -ohjeita](https://hono.dev/docs/getting-started/basic). Projekti on luotu seuraavalla komennolla:
 
 ```bash
-# piste komennon lopussa alustaa projektin nykyiseen kansioon:
-npm create hono@latest .
-
-# vaihtoehtoisesti voit tehdä valinnat myös osana komentoa:
+# luontikomento (ei tarvitse suorittaa uudestaan)
 npm create hono@latest . -- --template cloudflare-workers --pm npm --install
 ```
 
-Valitse pohjaksi (template) `cloudflare-workers`<sup>1</sup> ja paketinhallinnaksi `npm`. Luontityökalu luo sinulle tarvitsemasi tiedostot ja kansiot ja varmistaa lisäksi, että haluat luoda projektin nykyiseen kansioon, joka ei ole tyhjä. Jos luot epähuomiossa projektin väärään paikkaan, voit siirtää luodut tiedostot ja kansiot manuaalisesti repositorion juureen.
+Sinun ei tarvitse suorittaa tätä luontikomentoa uudestaan, mutta voit halutessasi tutustua sen toimintaan ja luoda vastaavia uusia projekteja omiin tarkoituksiisi. Löydät tarkempaa tietoa projektin luonnissa käytetyistä työkaluista näistä npm-paketeista: [hono](https://www.npmjs.com/package/hono) ja [create-hono](https://www.npmjs.com/package/create-hono).
 
-Löydät tarkempaa tietoa yllä käytettävästä [hono-paketista](https://www.npmjs.com/package/hono) ja [create-hono-paketista](https://www.npmjs.com/package/create-hono) npm:n verkkosivuilta.
+Honon alustariippumattomuudesta huolimatta tarvitsemme projektille jonkin kohdeympäristön, joka tässä tapauksessa on [Cloudflare Workers](https://workers.cloudflare.com/). Cloudflare Workers on serverless-alusta, joka mahdollistaa JavaScriptin suorittamisen "reunalla" (edge), eli lähellä käyttäjää, mikä parantaa suorituskykyä ja vähentää latenssia. Sinun ei tarvitse rekisteröityä Cloudflareen, koska sovellusta kokeillaan ja testataan paikallisesti. Jos haluat, voit jatkaa tehtävän parissa ja julkaista sovelluksesi Cloudflaressa tai muussa pilvipalvelussa itsenäisesti.
 
-> [!NOTE]
-> <sup>1</sup> Alustariippumattomuudesta huolimatta esimerkin vuoksi tarvitsemme jonkin kohdeympäristön, joka tässä tapauksessa on [Cloudflare Workers](https://workers.cloudflare.com/). Cloudflare Workers on serverless-alusta, joka mahdollistaa JavaScriptin ja muiden kielten suorittamisen "reunalla" (edge), eli lähellä käyttäjää, mikä parantaa suorituskykyä ja vähentää latenssia.
+Cloudflare workers -sovelluksen testaaminen ja kehittäminen onnistuu paikallisesti [wrangler-kehityspalvelimen](https://www.npmjs.com/package/wrangler) avulla. Wrangler on Cloudflaren virallinen CLI-työkalu, joka mahdollistaa Workers-sovellusten hallinnan, testaamisen ja julkaisemisen. Wrangler on asennettu projektipohjan kehitysriippuvuuksiin, josta sitä käytetään taustalla esimerkiksi `npm run dev` -komennon yhteydessä.
+
+
+### Sovelluksen käynnistäminen
+
+[Projektipohjan dokumentaatiossa](https://github.com/honojs/starter/tree/main/templates/cloudflare-workers) on ohjeet projektin asentamiseksi ja käynnistämiseksi. Sovelluksen voi käynnistää paikallisesti seuraavilla komennoilla:
+
+> ```txt
+> npm install
+> npm run dev
+> ```
 >
-> Sinun ei tarvitse rekisteröityä Cloudflareen tai luoda tiliä, koska sovellusta kokeillaan ja testataan paikallisesti. Jos haluat, voit jatkaa tehtävän parissa ja julkaista sovelluksesi Cloudflaressa tai muussa pilvipalvelussa itsenäisesti.
-
-
-**Asennus ja käynnistys**
-
-Projektin luonnin yhteydessä [`create-hono`-työkalu](https://www.npmjs.com/package/create-hono) luo uuden `README.md`-tiedoston, joka sisältää lisää ohjeita projektin asentamiseksi ja käynnistämiseksi. Samat ohjeet löytyvät myös Getting Started -sivulta.
-
-Asenna riippuvuudet ja käynnistä kehityspalvelin edellä mainittujen lähteiden mukaan. Varmista myös, että sovelluksesi vastaa selaimen pyyntöön osoitteessa `http://localhost:8787`.
-
-
-**Hakemistorakenne**
-
-Tehtävän automaattiset testit on määritetty testaamaan `src/index.ts`-tiedostossa olevia funktioita, joten toteuta varsinainen sovellus kyseiseen tiedostoon. Voit lisäksi luoda muita tiedostoja ja kansioita tarpeen mukaan.
-
-> Tiedostosta `src/index.ts` tulee löytyä seuraava `export`, jonka avulla testit voivat käyttää sovellusta:
+> [For generating/synchronizing types based on your Worker configuration run](https://developers.cloudflare.com/workers/wrangler/commands/#types):
+>
+> ```txt
+> npm run cf-typegen
+> ```
+>
+> Pass the `CloudflareBindings` as generics when instantiating `Hono`:
 >
 > ```ts
-> // Tämä löytyy oletuksena valmiiksi tiedoston lopusta:
-> export default app
+> // src/index.ts
+> const app = new Hono<{ Bindings: CloudflareBindings }>()
 > ```
+>
+> *https://github.com/honojs/starter/tree/main/templates/cloudflare-workers*
+
+
+Asenna riippuvuudet ja käynnistä kehityspalvelin edellä mainittujen ohjeiden mukaan. Varmista, että sovelluksesi vastaa selaimen pyyntöön osoitteessa `http://localhost:8787`.
+
+
+### Automaattiset testit
+
+Tehtävän automaattiset testit löytyvät [tests-hakemistosta](./tests/) ja ne on määritetty testaamaan `src/index.ts`-tiedostossa olevia funktioita. Toteuta siis varsinainen sovellus kyseiseen tiedostoon. Voit lisäksi luoda muita tiedostoja ja kansioita tarpeen mukaan, kunhan `index.ts`-tiedosto toimii sovelluksen "pääsisäänkäyntinä".
+
+Testien suorittamiseksi tarvitset [Vitest-työkalun](https://vitest.dev/), joka on asennettu projektin kehitysriippuvuuksiin. Vitest on suosittu testaustyökalu, jolla on kirjoitushetkellä kymmeniä miljoonia viikoittaisia latauksia [npm-pakettirekisterissä](https://www.npmjs.com/package/vitest).
 
 
 ### Funktio 1: RGB → HEX -muunnin (25 %)
@@ -86,14 +101,13 @@ Esimerkiksi pyynnöllä `http://localhost:8787/rgb-to-hex?r=64&g=224&b=208` funk
 > [!TIP]
 > Huomaa, että kyselyparametrit ovat aina merkkijonoja, joten ne on syytä muuntaa kokonaisluvuiksi ennen kuin käytät niitä laskuissa.
 
-Testaa funktiosi toimintaa esimerkiksi selaimen tai curl-komennon avulla. Varmista, että ratkaisusi palauttaa oikeat HEX-arvot eri RGB-syötteillä. Voit myös hyödyntää automaattisia testejä, jotka on määritetty [`tests/rgbToHex.test.ts`-tiedostossa](./../tests/rgbToHex.test.ts).
+Testaa funktiosi toimintaa esimerkiksi selaimen tai curl-komennon avulla. Varmista, että ratkaisusi palauttaa oikeat HEX-arvot eri RGB-syötteillä. Voit myös hyödyntää automaattisia testejä, jotka on määritetty [`tests/rgbToHex.test.ts`-tiedostossa](./tests/rgbToHex.test.ts).
 
 ```bash
 # testaa funktio curl-komennolla:
 curl "http://localhost:8787/rgb-to-hex?r=64&g=224&b=208"
 
 # testaa funktio Vitest-työkalulla:
-npm install --save-dev vitest
 npx vitest run tests/rgbToHex.test.ts
 ```
 
@@ -112,10 +126,9 @@ Vastaus voidaan antaa JSON-muodossa hyödyntäen Honon `Context`-olion `json`-me
 > [!TIP]
 > Huomaa, että URL-osoitteessa `#`-merkki tulee koodata muodossa `%23`, jotta selain ei tulkitse sitä "ankkuriksi", eli sivun sisäiseksi linkiksi.
 
-Voit jälleen testata funktiosi toimintaa selaimella, curl-komennolla tai automaattisilla testeillä, jotka on määritetty [`tests/hexToRgb.test.ts`-tiedostossa](./../tests/hexToRgb.test.ts).
+Voit jälleen testata funktiosi toimintaa selaimella, curl-komennolla tai automaattisilla testeillä, jotka on määritetty [`tests/hexToRgb.test.ts`-tiedostossa](./tests/hexToRgb.test.ts).
 
 ```bash
-npm install --save-dev vitest
 npx vitest run tests/hexToRgb.test.ts
 ```
 
@@ -153,13 +166,7 @@ Lisäksi koodisi ei saa sisältää TypeScript- tai linter-virheitä.
 
 Ratkaisusi testataan automaattisesti [Vitest-työkalun avulla](https://vitest.dev/). Testit on määritelty valmiiksi `tests`-kansiossa, ja ne tarkistavat, että funktiosi toimivat vaatimusten mukaisesti.
 
-Asenna `vitest`-työkalu projektisi kehitysriippuvuuksiin komennolla:
-
-```bash
-npm install --save-dev vitest
-```
-
-Tämän jälkeen voit testata itse ratkaisusi komennoilla:
+Voit testata ratkaisusi toimivuutta ajamalla yksittäisiä testitiedostoja tai kaikki testit kerralla:
 
 ```bash
 # tehtävän vaiheet 1-3:
@@ -174,6 +181,7 @@ npx vitest run tests/errorHandling.test.ts
 npx vitest run
 ```
 
+
 ## Ratkaisun lähettäminen GitHubiin
 
 Tarkista, että olet lisännyt tekemäsi muutokset versionhallintaan ja tee commit. Lopuksi pushaa tekemäsi muutokset GitHubiin tarkastettavaksi. GitHub actions -työkalu tarkistaa automaattisesti, menevätkö testit läpi, ja näet tulokset GitHubin käyttöliittymästä actions-välilehdeltä.
@@ -183,11 +191,9 @@ Voit lähettää ratkaisusi uudestaan niin monesti kuin haluat tehtävän määr
 
 ## Lopuksi: mikä ihmeen serverless?
 
-Paikallisessa kehitysympäristössä tämä serverless-sovellus ei juuri eronnut palvelinpohjaisista sovelluksista. Tehtävässä tarvitsit oman Node.js-prosessin, joka kuunteli HTTP-pyyntöjä tietyssä portissa.
+Paikallisessa kehitysympäristössä tämä serverless-sovellus ei juuri eronnut palvelinpohjaisista sovelluksista. Tehtävässä tarvitsit [wrangler-kehityspalvelimen](https://www.npmjs.com/package/wrangler) sekä oman Node.js-prosessin, joka kuunteli HTTP-pyyntöjä tietyssä portissa.
 
-Tuotantokäytössä funktiosi voidaan kuitenkin ajaa ilman omaa pitkään käynnissä olevaa palvelinprosessia, jolloin maksat vain siitä ajasta, kun funktiosi todella suoritetaan. Tämä voi olla kustannustehokasta, erityisesti silloin, kun sovelluksesi ei ole jatkuvasti käytössä.
-
-Sovelluksesi skaalaaminen on myös yksinkertaisempaa, koska palveluntarjoajan kapasiteetti pystyy käsittelemään kuormituksen huiput ilman, että sinun tarvitsee käynnistää tai hallita ylimääräisiä sovelluspalvelimia kuormituksen vaihdellessa.
+Tuotantokäytössä funktiosi voidaan kuitenkin ajaa ilman omaa pitkään käynnissä olevaa palvelinprosessia, jolloin maksat esimerkiksi vain siitä ajasta, kun funktiosi todella suoritetaan. Tämä voi olla kustannustehokasta, erityisesti silloin, jos sovelluksesi kuormitus eri ajankohtina vaihtelee.
 
 Serverlessin todellinen luonne tulee siis esiin vasta, kun sovellus julkaistaan pilvipalveluun.
 
@@ -198,6 +204,17 @@ Serverlessin todellinen luonne tulee siis esiin vasta, kun sovellus julkaistaan 
 
 Hono-sovelluskehys on [avoimen lähdekoodin projekti](https://github.com/honojs/hono), joka on lisensoitu [MIT-lisenssillä](https://github.com/honojs/hono/blob/main/LICENSE).
 
+## Honon starter-projektipohja
+
+Tämän projektin pohjana on käytetty Honon [cloudflare-workers-pohjaa](https://github.com/honojs/starter/tree/main/templates/cloudflare-workers), joka on lisensoitu [MIT-lisenssillä](https://github.com/honojs/starter#license).
+
+## Cloudflare Workers SDK (Wrangler)
+
+Cloudflare Workers SDK on [avoimen lähdekoodin projekti](https://github.com/cloudflare/workers-sdk), joka on lisensoitu sekä Apache 2.0- että MIT-lisenssillä.
+
+## Vitest-testaustyökalu
+
+Vitest-työkalu on lisensoitu MIT-lisenssillä: https://github.com/vitest-dev/vitest/blob/main/LICENSE
 
 ### Tämä tehtävä
 
