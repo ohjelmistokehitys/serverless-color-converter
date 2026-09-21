@@ -204,15 +204,15 @@ Serverlessin todellinen luonne tulee siis esiin vasta, kun sovellus julkaistaan 
 
 Hono-sovelluskehys on [avoimen lähdekoodin projekti](https://github.com/honojs/hono), joka on lisensoitu [MIT-lisenssillä](https://github.com/honojs/hono/blob/main/LICENSE).
 
-## Honon starter-projektipohja
+### Honon starter-projektipohja
 
 Tämän projektin pohjana on käytetty Honon [cloudflare-workers-pohjaa](https://github.com/honojs/starter/tree/main/templates/cloudflare-workers), joka on lisensoitu [MIT-lisenssillä](https://github.com/honojs/starter#license).
 
-## Cloudflare Workers SDK (Wrangler)
+### Cloudflare Workers SDK (Wrangler)
 
 Cloudflare Workers SDK on [avoimen lähdekoodin projekti](https://github.com/cloudflare/workers-sdk), joka on lisensoitu sekä Apache 2.0- että MIT-lisenssillä.
 
-## Vitest-testaustyökalu
+### Vitest-testaustyökalu
 
 Vitest-työkalu on lisensoitu MIT-lisenssillä: https://github.com/vitest-dev/vitest/blob/main/LICENSE
 
