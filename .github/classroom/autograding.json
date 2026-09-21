@@ -2,7 +2,7 @@
     "tests": [
         {
             "name": "RGB to HEX conversion",
-            "setup": "npm install; npm install -D vitest",
+            "setup": "",
             "run": "npx vitest run tests/rgbToHex.test.ts",
             "input": "",
             "output": "",
@@ -12,7 +12,7 @@
         },
         {
             "name": "HEX to RGB conversion",
-            "setup": "npm install; npm install -D vitest",
+            "setup": "",
             "run": "npx vitest run tests/hexToRgb.test.ts",
             "input": "",
             "output": "",
@@ -22,7 +22,7 @@
         },
         {
             "name": "Preview HTML endpoint",
-            "setup": "npm install; npm install -D vitest",
+            "setup": "",
             "run": "npx vitest run tests/preview.test.ts",
             "input": "",
             "output": "",
@@ -32,7 +32,7 @@
         },
         {
             "name": "Error handling and code quality",
-            "setup": "npm install; npm install -D vitest",
+            "setup": "",
             "run": "npx vitest run tests/errorHandling.test.ts",
             "input": "",
             "output": "",
@@ -42,7 +42,7 @@
         },
         {
             "name": "TypeScript and linting checks",
-            "setup": "npm install; npm install -D typescript",
+            "setup": "npm install -D typescript",
             "run": "npx tsc --noEmit",
             "input": "",
             "output": "",
